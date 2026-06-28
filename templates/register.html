@@ -3,140 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Your Account</title>
+    <title>Admin Panel - URL Shortener</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-[#0b0e27] min-h-screen flex items-center justify-center p-4 font-sans text-gray-100">
-
-    <div class="bg-gray-800 w-full max-w-md p-8 rounded-2xl shadow-2xl border border-gray-700 space-y-6 my-6">
+    <script>
+        tailwind.config = { darkMode: 'class' }
         
-        <div class="text-center space-y-2">
-            <div class="inline-flex items-center justify-center w-12 h-12 bg-indigo-950/50 text-indigo-400 rounded-xl text-2xl border border-indigo-900/60">
-                <i class="fa-solid fa-user-plus"></i>
+        // INSTANT THEME CHECKER: Page render hone se pehle hi class apply karega
+        function applyTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+            }
+        }
+        applyTheme();
+    </script>
+</head>
+<body class="bg-[#f4f6fa] dark:bg-[#0b0e27] min-h-screen text-gray-800 dark:text-gray-100 font-sans transition-colors duration-200">
+
+    <nav class="bg-white dark:bg-[#020617] border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex justify-between items-center shadow-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900 rounded-xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-user-shield"></i>
             </div>
-            <h1 class="text-2xl font-bold text-white tracking-tight">Create Account</h1>
-            <p class="text-sm text-gray-400">Join us to manage and track your shortened URLs</p>
+            <div>
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Admin Control Center</h1>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Manage registered users and active systems</p>
+            </div>
         </div>
+        <div class="flex items-center gap-4">
+            <a href="/" class="px-4 py-2 bg-gray-100 dark:bg-purple-500 hover:bg-gray-200 dark:hover:bg-purple-700 border border-gray-300 dark:border-gray-700 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-200 transition flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-chart-pie"></i> Main Dashboard
+            </a>
+            <a href="/logout" class="px-4 py-2 bg-red-50 dark:bg-red-500 hover:bg-red-100 dark:hover:bg-red-800 border border-red-200 dark:border-red-900 text-white-600 dark:text-white-400 text-sm font-medium rounded-lg transition flex items-center gap-2">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl w-full mx-auto p-6 space-y-6">
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
-              <div class="p-4 rounded-lg text-sm font-medium border bg-red-950/40 text-red-400 border-red-900 flex items-center gap-2">
-                  <i class="fa-solid fa-circle-exclamation text-lg"></i>
+              <div class="p-4 rounded-xl text-sm font-medium border {% if category == 'success' %} bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900 {% else %} bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900 {% endif %} flex items-center gap-2 shadow-md">
+                  <i class="fa-solid {% if category == 'success' %}fa-circle-check{% else %}fa-circle-exclamation{% endif %} text-lg"></i>
                   <span>{{ message }}</span>
               </div>
             {% endfor %}
           {% endif %}
         {% endwith %}
 
-        <form action="/register" method="POST" class="space-y-4">
-            
-            <div>
-                <label class="block text-xs font-semibold uppercase text-gray-400 tracking-wider mb-1">Username</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                        <i class="fa-regular fa-user"></i>
-                    </span>
-                    <input type="text" name="username" required placeholder="e.g. John Doe" 
-                           class="w-full pl-10 pr-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm text-white placeholder-gray-500">
-                </div>
+        <div class="bg-white dark:bg-[#1e293b] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden transition-colors">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-[#1e293b]">
+                <h2 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-users text-indigo-600 dark:text-indigo-400"></i> Registered Users Base (Total: {{ users|length }})
+                </h2>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold uppercase text-gray-400 tracking-wider mb-1">Email Address</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                        <i class="fa-regular fa-envelope"></i>
-                    </span>
-                    <input type="email" name="email" required placeholder="name@example.com" 
-                           class="w-full pl-10 pr-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm text-white placeholder-gray-500">
-                </div>
-            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 dark:bg-[#1e293b] text-gray-500 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider border-b border-gray-200 dark:border-gray-800">
+                            <th class="p-4">User Details</th>
+                            <th class="p-4">Email Address</th>
+                            <th class="p-4">Role / Access</th>
+                            <th class="p-4">Total Links</th>
+                            <th class="p-4 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-800 text-sm">
+                        {% for user in users %}
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors duration-150">
+                            
+                            <td class="p-4 font-medium text-gray-900 dark:text-white">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs border border-gray-200 dark:border-gray-600 font-bold text-indigo-600 dark:text-indigo-300">
+                                        {{ user.username[:2]|upper }}
+                                    </div>
+                                    <form id="edit-form-{{ user.id }}" action="/admin/edit-user/{{ user.id }}" method="POST" class="inline">
+                                        <input type="text" name="username" value="{{ user.username }}" class="bg-transparent border border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-indigo-500 rounded px-2 py-1 text-gray-900 dark:text-white text-sm focus:outline-none font-medium transition">
+                                </div>
+                            </td>
 
-            <div>
-                <label class="block text-xs font-semibold uppercase text-gray-400 tracking-wider mb-1">Password</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                        <i class="fa-solid fa-lock"></i>
-                    </span>
-                    <input type="password" name="password" id="regPassword" required placeholder="••••••••"
-                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{8,}"
-                           class="w-full pl-10 pr-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm text-white placeholder-gray-500">
-                </div>
-            </div>
+                            <td class="p-4">
+                                <input type="email" name="email" value="{{ user.email }}" class="bg-transparent border border-transparent hover:border-gray-300 dark:hover:border-gray-700 focus:border-indigo-500 rounded px-2 py-1 text-gray-700 dark:text-gray-300 text-sm focus:outline-none w-64 transition">
+                            </td>
 
-            <div class="pt-2 border-t border-gray-700">
-                <label class="block text-xs font-semibold uppercase text-gray-400 tracking-wider mb-1">Security Question (For Password Reset)</label>
-                <select name="security_question" class="w-full p-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" required>
-                    <option value="What is your pet's name?" class="bg-gray-800">What is your pet's name?</option>
-                    <option value="What is your mother's maiden name?" class="bg-gray-800">What is your mother's maiden name?</option>
-                    <option value="What was the name of your first school?" class="bg-gray-800">What was the name of your first school?</option>
-                </select>
-            </div>
-            
-            <div>
-                <label class="block text-xs font-semibold uppercase text-gray-400 tracking-wider mb-1">Your Secret Answer</label>
-                <input type="text" name="security_answer" class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm text-white placeholder-gray-500" placeholder="Enter your secret answer" required>
-            </div>
+                            <td class="p-4">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" name="is_admin" {% if user.is_admin %}checked{% endif %} {% if current_user.id == user.id %}disabled{% endif %} class="w-4 h-4 rounded text-indigo-600 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 accent-indigo-500 focus:ring-indigo-500 cursor-pointer disabled:opacity-50">
+                                    <span class="text-sm {% if user.is_admin %}text-indigo-600 dark:text-indigo-400 font-medium{% else %}text-gray-500 dark:text-gray-400{% endif %}">
+                                        Administrator
+                                    </span>
+                                </div>
+                            </td>
 
-            <div class="p-3.5 bg-gray-900/60 rounded-xl border border-gray-700 text-xs space-y-2 text-gray-400 transition-all duration-200">
-                <p class="font-bold text-gray-300 mb-1 flex items-center gap-1">
-                    <i class="fa-solid fa-shield-halved text-indigo-400"></i> Password Security Requirements:
-                </p>
-                <div id="charLength" class="flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-red-400/60"></i> At least 8 characters</div>
-                <div id="upperCase" class="flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-red-400/60"></i> At least one uppercase letter (A-Z)</div>
-                <div id="lowerCase" class="flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-red-400/60"></i> At least one lowercase letter (a-z)</div>
-                <div id="numberDigit" class="flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-red-400/60"></i> At least one number (0-9)</div>
-                <div id="specialChar" class="flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-red-400/60"></i> At least one special character (@, $, !, %, *, ?, &)</div>
+                            <td class="p-4">
+                                <span class="bg-gray-100 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-300 inline-flex items-center gap-1.5">
+                                    <i class="fa-solid fa-link text-gray-400"></i> {{ user.urls|length }} Links
+                                </span>
+                            </td>
+
+                            <td class="p-4 text-right">
+                                <div class="flex items-center justify-end gap-3">
+                                    <button type="submit" form="edit-form-{{ user.id }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition text-sm font-medium shadow-md flex items-center gap-2">
+                                        <i class="fa-solid fa-floppy-disk"></i> Save
+                                    </button>
+                                    </form>
+
+                                    {% if current_user.id != user.id %}
+                                    <form action="/admin/delete-user/{{ user.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete user: {{ user.username }}? This will clear all their links too!');" class="inline">
+                                        <button type="submit" class="px-4 py-2 bg-transparent hover:bg-red-50 dark:hover:bg-red-950/40 text-red-600 dark:text-red-400/80 hover:text-red-400 border border-transparent hover:border-red-200 dark:hover:border-red-900/60 rounded-lg transition text-sm font-medium flex items-center gap-2">
+                                            <i class="fa-solid fa-trash-can"></i> Delete
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <span class="text-sm text-gray-400 dark:text-gray-500 italic pr-2 select-none">Self Account</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
-            <button type="submit" class="w-full py-3 bg-[#6366f1] hover:bg-indigo-700 text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition shadow-lg hover:shadow-indigo-500/20">
-                <i class="fa-solid fa-user-plus"></i> Create Free Account
-            </button>
-        </form>
-
-        <div class="text-center border-t border-gray-700 pt-4">
-            <p class="text-sm text-gray-400">Already have an account? 
-                <a href="/login" class="text-indigo-400 font-semibold hover:underline ml-1">Sign In</a>
-            </p>
         </div>
-    </div>
+    </main>
 
     <script>
-        const passwordInput = document.getElementById('regPassword');
-        
-        const textMap = {
-            charLength: "At least 8 characters",
-            upperCase: "At least one uppercase letter (A-Z)",
-            lowerCase: "At least one lowercase letter (a-z)",
-            numberDigit: "At least one number (0-9)",
-            specialChar: "At least one special character (@, $, !, %, *, ?, &)"
-        };
-
-        const criteria = {
-            charLength: { regex: /.{8,}/, element: document.getElementById('charLength') },
-            upperCase: { regex: /[A-Z]/, element: document.getElementById('upperCase') },
-            lowerCase: { regex: /[a-z]/, element: document.getElementById('lowerCase') },
-            numberDigit: { regex: /\d/, element: document.getElementById('numberDigit') },
-            specialChar: { regex: /[@$!%*?&]/, element: document.getElementById('specialChar') }
-        };
-
-        passwordInput.addEventListener('input', () => {
-            const val = passwordInput.value;
-            
-            for (let key in criteria) {
-                const isValid = criteria[key].regex.test(val);
-                const el = criteria[key].element;
-                const baseText = textMap[key];
-                
-                if (isValid) {
-                    el.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> ${baseText}`;
-                    el.className = "flex items-center gap-1.5 text-emerald-400 font-medium";
-                } else {
-                    el.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-400/60"></i> ${baseText}`;
-                    el.className = "flex items-center gap-1.5 text-gray-400";
-                }
+        // Real-time tab monitoring sync handler
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                applyTheme();
             }
         });
     </script>
