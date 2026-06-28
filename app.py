@@ -123,11 +123,13 @@ def login():
         user = User.query.filter_by(email=email).first()
         
         if user and check_password_hash(user.password_hash, password):
-            login_user(user)
+            # ✅ REMEMBER=TRUE lagaya taaki session mobile aur browser me lock ho jaye
+            login_user(user, remember=True) 
             return redirect(url_for('index'))
         
         flash('Invalid credentials.', 'error')
-        return redirect(url_for('login'))
+        # ✅ Redirect karne ke bajay direct render kariye taaki flash text turant dikhe
+        return render_template('login.html') 
 
     return render_template('login.html')
 
