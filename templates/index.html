@@ -18,299 +18,156 @@
 </head>
 <body class="bg-[#f4f6fa] dark:bg-[#0f172a] text-gray-800 dark:text-gray-100 min-h-screen font-sans transition-colors duration-200">
 
-    <nav class="bg-[#0b0e27] dark:bg-[#020617] text-white px-8 py-4 flex justify-between items-center shadow-md">
-        <div class="flex items-center space-x-2 text-xl font-bold tracking-wide text-indigo-400">
-            <i class="fa-solid fa-link text-white"></i>
-            <span class="text-white">Quickly</span>
+    <nav class="bg-[#0b0e27] dark:bg-[#020617] text-white px-4 sm:px-8 py-4 flex flex-col sm:flex-row justify-between items-center shadow-md gap-4">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-indigo-600/10 border border-indigo-500/30 text-indigo-400 rounded-xl flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-link"></i>
+            </div>
+            <div>
+                <span class="text-lg font-bold tracking-tight block">Quickly Link</span>
+                <span class="text-[10px] text-gray-400 font-mono block -mt-1">v2.1.0-prod</span>
+            </div>
         </div>
         
-        <div class="flex items-center space-x-6">
-            <button onclick="toggleTheme()" class="text-gray-300 hover:text-white transition focus:outline-none">
-                <i id="themeIcon" class="fa-solid fa-moon text-lg dark:hidden"></i>
-                <i id="themeIconDark" class="fa-solid fa-sun text-lg hidden dark:block text-amber-400"></i>
-            </button>
-
-            <button onclick="openProfileModal()" class="text-sm text-indigo-300 hover:text-indigo-100 font-medium flex items-center gap-1.5 transition">
-                <i class="fa-solid fa-user-gear text-base"></i> Settings
-            </button>
+        <div class="flex items-center gap-3 w-full sm:w-auto justify-end flex-wrap">
+            <span class="text-sm bg-slate-800/40 border border-slate-700/50 px-3 py-1.5 rounded-lg text-gray-300 font-medium">
+                Hi, <span class="font-bold text-indigo-400 font-mono">{{ user.username }}</span>
+            </span>
             
             {% if user.is_admin %}
-            <a href="/admin" class="bg-amber-500 hover:bg-amber-600 text-gray-900 text-sm px-3 py-2 rounded-md font-bold transition flex items-center gap-1">
+            <a href="/admin" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-md inline-flex items-center gap-1">
                 <i class="fa-solid fa-user-shield"></i> Admin Panel
             </a>
             {% endif %}
             
-            <a href="/logout" class="bg-[#ff4d4d] hover:bg-red-600 text-white text-sm px-4 py-2 rounded-md font-medium transition flex items-center gap-1">
+            <a href="/logout" class="bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/20 px-4 py-2 rounded-lg text-xs font-semibold transition inline-flex items-center gap-1">
                 <i class="fa-solid fa-right-from-bracket"></i> Logout
             </a>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto p-6 space-y-6">
-        <div class="p-2">
-            <h1 class="text-2xl font-bold">Welcome, <span class="text-indigo-600 dark:text-indigo-400">{{ user.username }} 👋</span></h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Manage your links securely inside your custom portal panel.</p>
-        </div>
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
+        
+        <section class="bg-white dark:bg-[#1e293b] rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 p-5 sm:p-8 space-y-6">
+            <div>
+                <h2 class="text-xl font-bold tracking-tight">Shorten a New Long URL</h2>
+                <p class="text-xs text-gray-400 dark:text-gray-400 mt-0.5">Deploy instantaneous redirect proxies globally.</p>
+            </div>
 
-        <section class="bg-white dark:bg-[#1e293b] p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
-            <h2 class="text-xl font-bold mb-4">Create Short URL</h2>
             <form id="shortenForm" class="space-y-4">
-                <div class="flex flex-col md:flex-row gap-4 items-center">
-                    <div class="relative w-full md:flex-1">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-500">
-                            <i class="fa-solid fa-link"></i>
-                        </span>
-                        <input type="url" id="longUrl" required placeholder="Enter your long URL here..." 
-                               class="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-[#334155] border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm">
-                    </div>
-                    
-                    <div class="flex items-center w-full md:w-auto bg-gray-50 dark:bg-[#334155] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                        <span class="px-3 text-gray-400 text-sm border-r border-gray-200 dark:border-gray-700">/</span>
-                        <input type="text" id="customAlias" placeholder="Custom alias (optional)" 
-                               class="px-4 py-3 bg-transparent focus:outline-none w-full md:w-48 text-sm text-gray-800 dark:text-white">
-                    </div>
-
-                    <button type="submit" class="w-full md:w-auto bg-[#6366f1] hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition shadow-sm">
-                        <i class="fa-solid fa-bolt"></i> Shorten URL
-                    </button>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Destination URL *</label>
+                    <input type="url" id="longUrl" required placeholder="https://example.com/deep-target-path" 
+                           class="w-full p-3 border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-[#0f172a]/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
 
-                <div class="pt-2">
-                    <button type="button" onclick="document.getElementById('advancedOptions').classList.toggle('hidden')" class="text-xs font-semibold uppercase text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
-                        <i class="fa-solid fa-sliders"></i> Advanced Options (Scheduling & Password)
-                    </button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Custom Alias (Optional)</label>
+                        <input type="text" id="customAlias" placeholder="e.g. bio-link" 
+                               class="w-full p-3 border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-[#0f172a]/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Access Password (Optional)</label>
+                        <input type="password" id="linkPassword" placeholder="Passphrase protection" 
+                               class="w-full p-3 border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-[#0f172a]/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
                 </div>
 
-                <div id="advancedOptions" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-[#0f172a]/40 rounded-xl border border-gray-100 dark:border-gray-800/80 transition-all">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Start Date & Time (Optional)</label>
-                        <input type="datetime-local" id="startDate" max="9999-12-31T23:59" class="w-full p-2 bg-white dark:bg-[#334155] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 [appearance:textfield] [&::-webkit-calendar-picker-indicator]:dark:invert">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Activation Window Start</label>
+                        <input type="datetime-local" id="startDate" 
+                               class="w-full p-3 border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-[#0f172a]/50 rounded-xl text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Expiry Date & Time (Optional)</label>
-                        <input type="datetime-local" id="expiryDate" max="9999-12-31T23:59" class="w-full p-2 bg-white dark:bg-[#334155] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 [appearance:textfield] [&::-webkit-calendar-picker-indicator]:dark:invert">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Protect with Password (Optional)</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                                <i class="fa-solid fa-key"></i>
-                            </span>
-                            <input type="password" id="linkPassword" placeholder="Requires password to open" class="w-full pl-9 pr-4 p-2 bg-white dark:bg-[#334155] border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        </div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Expiration Deadline</label>
+                        <input type="datetime-local" id="expiryDate" 
+                               class="w-full p-3 border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-[#0f172a]/50 rounded-xl text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
+
+                <button type="submit" class="w-full bg-[#6366f1] hover:bg-indigo-700 text-white font-medium py-3 rounded-xl transition shadow-md flex items-center justify-center gap-2 pt-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Shorten URL Instance
+                </button>
             </form>
 
-            <div id="successAlert" class="hidden mt-4 p-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 rounded-lg flex justify-between items-center">
-                <div class="flex items-center gap-3 flex-wrap">
-                    <i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
-                    <span class="text-sm font-medium">Short URL created!</span>
-                    <div class="flex items-center bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-900/60 rounded-lg p-1.5 ml-1 shadow-sm">
-                        <a id="resultLink" href="#" target="_blank" class="underline font-mono text-indigo-600 dark:text-indigo-400 px-2 text-sm"></a>
-                        <button type="button" onclick="copyToClipboard()" id="copyBtn" class="ml-1 px-2.5 py-1 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-100 dark:border-indigo-900 text-indigo-600 dark:text-indigo-400 rounded-md transition flex items-center gap-1.5 text-xs font-semibold" title="Copy to clipboard">
-                            <i id="copyIcon" class="fa-regular fa-copy"></i>
-                            <span id="copyText">Copy</span>
-                        </button>
-                    </div>
+            <div id="successAlert" class="hidden p-4 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="min-w-0 w-full">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 block">Link Synced Successfully!</span>
+                    <a id="resultLink" href="#" target="_blank" class="text-sm font-semibold text-indigo-600 dark:text-indigo-400 font-mono truncate block underline mt-0.5"></a>
                 </div>
-                <button type="button" onclick="document.getElementById('successAlert').classList.add('hidden')" class="text-emerald-500 p-1 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 rounded transition">
-                    <i class="fa-solid fa-xmark"></i>
+                <button onclick="navigator.clipboard.writeText(document.getElementById('resultLink').innerText); alert('Copied to system clipboard!');" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition">
+                    <i class="fa-regular fa-copy"></i> Copy Link
                 </button>
             </div>
         </section>
 
-        <section class="bg-white dark:bg-[#1e293b] rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden transition-colors">
-            <div class="p-6 border-b border-gray-100 dark:border-gray-800">
-                <h2 class="text-xl font-bold">Your Shortened URLs</h2>
+        <section class="bg-white dark:bg-[#1e293b] rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+            <div class="p-5 sm:p-6 border-b border-gray-100 dark:border-gray-800 flex items-center gap-2">
+                <span class="text-indigo-500"><i class="fa-solid fa-chart-line"></i></span>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400">Shortened Metrics Index</h3>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+
+            <div class="overflow-x-auto w-full">
+                <table class="w-full text-left border-collapse min-w-[500px] md:min-w-full">
                     <thead>
-                        <tr class="bg-[#f8fafc] dark:bg-[#1e293b] border-b border-gray-100 dark:border-gray-800 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                            <th class="py-4 px-6 w-12">#</th>
-                            <th class="py-4 px-6">Original URL</th>
-                            <th class="py-4 px-6">Short URL</th>
-                            <th class="py-4 px-6 text-center">Clicks</th>
-                            <th class="py-4 px-6 text-center">QR Code</th>
-                            <th class="py-4 px-6 text-center">Actions</th>
+                        <tr class="bg-gray-50 dark:bg-[#141b2e] border-b border-gray-100 dark:border-gray-800 text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                            <th class="p-4 sm:p-5">Routing Information</th>
+                            <th class="p-4 sm:p-5">Usage</th>
+                            <th class="p-4 sm:p-5 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="linksTableBody" class="divide-y divide-gray-100 dark:divide-gray-800 text-sm"></tbody>
+                    <tbody id="linksTableBody" class="divide-y divide-gray-100 dark:divide-gray-800 text-sm">
+                        </tbody>
                 </table>
             </div>
         </section>
     </main>
 
-    <div id="profileModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white dark:bg-[#1e293b] w-full max-w-md p-6 rounded-xl shadow-2xl space-y-4 border border-gray-100 dark:border-gray-800">
-            <div class="flex justify-between items-center border-b dark:border-gray-700 pb-3">
-                <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-1.5"><i class="fa-solid fa-user-pen text-indigo-500"></i> Edit Profile Details</h3>
-                <button onclick="closeProfileModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            
-            <form id="profileUpdateForm" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Username</label>
-                    <input type="text" id="modalUsername" value="{{ user.username }}" required class="w-full px-3 py-2 border dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-[#334155] text-sm text-gray-800 dark:text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Email Address</label>
-                    <input type="email" id="modalEmail" value="{{ user.email }}" required class="w-full px-3 py-2 border dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-[#334155] text-sm text-gray-800 dark:text-white">
-                </div>
-                <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" onclick="closeProfileModal()" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition text-gray-700 dark:text-gray-200">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition">Save Updates</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <div id="qrModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white dark:bg-[#1e293b] w-full max-w-xs p-6 rounded-xl shadow-2xl text-center space-y-4 border border-gray-100 dark:border-gray-800">
-            <div class="flex justify-between items-center border-b dark:border-gray-700 pb-2">
-                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Scan QR Code</h3>
-                <button onclick="closeQRModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            
-            <div id="qrcode" class="flex justify-center p-3 bg-white rounded-lg inline-block mx-auto"></div>
-            <p id="qrTargetLink" class="text-xs font-mono text-indigo-500 break-all"></p>
-        </div>
-    </div>
-
     <script>
-        let qrInstance = null;
-
-        // 📋 INVISIBLE TEXTAREA BACKUP ENGINE (100% WORKING FOR COPY)
-        function copyToClipboard() {
-            const resultElement = document.getElementById('resultLink');
-            if (!resultElement) return;
-            const linkText = resultElement.textContent;
-            
-            const tempInput = document.createElement('textarea');
-            tempInput.value = linkText;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            tempInput.setSelectionRange(0, 99999);
-            
-            try {
-                document.execCommand('copy');
-                const copyBtn = document.getElementById('copyBtn');
-                const copyIcon = document.getElementById('copyIcon');
-                const copyText = document.getElementById('copyText');
-                
-                if (copyBtn && copyIcon && copyText) {
-                    copyText.textContent = "Copied!";
-                    copyIcon.className = "fa-solid fa-check text-emerald-500";
-                    copyBtn.classList.remove('bg-indigo-50', 'text-indigo-600');
-                    copyBtn.classList.add('bg-emerald-50', 'text-emerald-600', 'border-emerald-200');
-
-                    setTimeout(() => {
-                        copyText.textContent = "Copy";
-                        copyIcon.className = "fa-regular fa-copy";
-                        copyBtn.classList.add('bg-indigo-50', 'text-indigo-600');
-                        copyBtn.classList.remove('bg-emerald-50', 'text-emerald-600', 'border-emerald-200');
-                    }, 2000);
-                }
-            } catch (err) {
-                console.error('Fallback Copy failed', err);
-            }
-            document.body.removeChild(tempInput);
-        }
-
-        function generateQR(shortUrl) {
-            document.getElementById("qrcode").innerHTML = "";
-            document.getElementById("qrTargetLink").textContent = shortUrl;
-
-            qrInstance = new QRCode(document.getElementById("qrcode"), {
-                text: shortUrl,
-                width: 180,
-                height: 180,
-                colorDark : "#0f172a", 
-                colorLight : "#ffffff", 
-                correctLevel : QRCode.CorrectLevel.H
-            });
-
-            document.getElementById('qrModal').className = "fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4";
-        }
-
-        function closeQRModal() {
-            document.getElementById('qrModal').className = "fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4";
-        }
-        
-        function toggleTheme() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-            window.dispatchEvent(new Event('storage'));
-        }
-
-        function openProfileModal() { document.getElementById('profileModal').className = "fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"; }
-        function closeProfileModal() { document.getElementById('profileModal').className = "fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4"; }
-
-        window.addEventListener('storage', () => {
-            if (localStorage.getItem('theme') === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        });
-
-        document.getElementById('profileUpdateForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('modalUsername').value;
-            const email = document.getElementById('modalEmail').value;
-            const res = await fetch('/api/profile/update', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email })
-            });
-            if (res.ok) { alert("Profile updated successfully!"); window.location.reload(); }
-            else { const data = await res.json(); alert(data.error); }
-        });
-
         const shortenForm = document.getElementById('shortenForm');
-        const linksTableBody = document.getElementById('linksTableBody');
         const successAlert = document.getElementById('successAlert');
         const resultLink = document.getElementById('resultLink');
+        const linksTableBody = document.getElementById('linksTableBody');
 
         async function loadLinks() {
-            const res = await fetch('/api/links');
-            if (res.status === 401) { window.location.href = '/login'; return; }
-            const links = await res.json();
+            const response = await fetch('/api/links');
+            const links = await response.json() || [];
             linksTableBody.innerHTML = '';
+            
             if(links.length === 0) {
-                linksTableBody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-gray-400">No links created yet.</td></tr>`;
+                linksTableBody.innerHTML = `<tr><td colspan="3" class="text-center text-gray-400 p-8 text-xs">No active proxy links deployment records found.</td></tr>`;
                 return;
             }
-            links.forEach((link, index) => {
-                const row = document.createElement('tr');
-                row.className = "hover:bg-gray-50 dark:hover:bg-gray-800/50 transition border-b border-gray-100 dark:border-gray-800";
-                row.innerHTML = `
-                    <td class="py-4 px-6 font-medium text-gray-400">${index + 1}</td>
-                    <td class="py-4 px-6 max-w-xs truncate text-indigo-600 dark:text-indigo-400"><a href="${link.original_url}" target="_blank">${link.original_url}</a></td>
-                    <td class="py-4 px-6"><span class="bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 px-2 py-1 rounded text-xs font-mono">${link.short_url}</span></td>
-                    <td class="py-4 px-6 text-center"><span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-2 rounded font-semibold text-xs">${link.clicks}</span></td>
-        
-                    <td class="py-4 px-6 text-center">
-                        <button onclick="generateQR('${link.short_url}')" class="text-indigo-500 hover:text-indigo-700 transition" title="View QR Code">
-                            <i class="fa-solid fa-qrcode text-lg"></i>
-                        </button>
-                    </td>
 
-                    <td class="py-4 px-6 text-center">
-                        <button onclick="deleteLink(${link.id})" class="text-red-400 hover:text-red-600 transition"><i class="fa-regular fa-trash-can"></i></button>
+            links.forEach(link => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-gray-50/50 dark:hover:bg-[#151f32]/30 transition";
+                row.innerHTML = `
+                    <td class="p-4 sm:p-5 max-w-[180px] sm:max-w-xs">
+                        <div class="space-y-0.5">
+                            <a href="${link.short_url}" target="_blank" class="font-mono text-sm font-bold text-indigo-600 dark:text-indigo-400 break-all hover:underline block">${link.short_url}</a>
+                            <p class="text-xs text-gray-400 truncate">Target: ${link.original_url}</p>
+                            <span class="inline-block text-[10px] text-gray-400 font-mono bg-gray-50 dark:bg-gray-800 px-1 py-0.5 rounded">${link.created_at}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 sm:p-5 whitespace-nowrap">
+                        <div>
+                            <span class="block text-[10px] font-bold text-gray-400 uppercase">Hits</span>
+                            <span class="font-mono text-sm font-bold text-indigo-500"><i class="fa-solid fa-chart-simple text-[10px]"></i> ${link.clicks}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 sm:p-5 text-right whitespace-nowrap">
+                        <button onclick="deleteLink(${link.id})" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 text-red-500 rounded-lg text-xs font-semibold border border-red-100 dark:border-red-900/30 inline-flex items-center gap-1">
+                            <i class="fa-regular fa-trash-can"></i> Delete
+                        </button>
                     </td>
                 `;
                 linksTableBody.appendChild(row);
             });
         }
 
-        // ✅ FIXED SUBMISSION HANDLER WITH ALL ADVANCED INPUTS BINDING
         shortenForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const url = document.getElementById('longUrl').value;
@@ -332,7 +189,7 @@
         });
 
         async function deleteLink(id) {
-            if (confirm("Delete this link?")) {
+            if (confirm("Permanently wipe this routing entry node?")) {
                 await fetch(`/api/links/${id}`, { method: 'DELETE' });
                 loadLinks();
             }
