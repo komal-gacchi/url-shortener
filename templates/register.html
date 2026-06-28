@@ -32,16 +32,16 @@
         <form action="/register" method="POST" class="space-y-4">
             <div>
                 <label class="block text-xs font-semibold uppercase text-gray-400 mb-1 tracking-wider">Username</label>
-                <input type="text" name="username" value="{{ username or '' }}" required placeholder="alex24" class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500 transition">
+                <input type="text" name="username" value="{{ username or '' }}" required placeholder="John Doe" class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500 transition">
             </div>
 
             <div>
                 <label class="block text-xs font-semibold uppercase text-gray-400 mb-1 tracking-wider">Email Address</label>
-                <input type="email" name="email" value="{{ email or '' }}" required placeholder="alex@example.com" class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500 transition">
+                <input type="email" name="email" value="{{ email or '' }}" required placeholder="johndoe@example.com" class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500 transition">
             </div>
 
             <div>
-                <label class="block text-xs font-semibold uppercase text-gray-400 mb-1 tracking-wider">Mother's Maiden Name</label>
+                <label class="block text-xs font-semibold uppercase text-gray-400 mb-1 tracking-wider">What's your pet name?</label>
                 <input type="text" name="security_answer" required placeholder="lowercase response answer" class="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500 transition">
             </div>
 
@@ -58,7 +58,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="w-full bg-[#6366f1] text-white py-3 rounded-lg font-medium hover:bg-indigo-700 shadow-lg transition pt-2">Create Workspace Node</button>
+            <button type="submit" class="w-full bg-[#6366f1] text-white py-3 rounded-lg font-medium hover:bg-indigo-700 shadow-lg transition pt-2">Create account</button>
         </form>
 
         <div class="text-center border-t border-gray-700 pt-4 text-xs text-gray-400">
