@@ -181,51 +181,42 @@
     <script>
         let qrInstance = null;
 
-        // 📋 DYNAMIC COPY ENGINE WITH EMERALD SUCCESS EFFECT
-function copyToClipboard() {
-    const resultElement = document.getElementById('resultLink');
-    if (!resultElement) return;
-    
-    const linkText = resultElement.textContent;
-    
-    // Ek temporary invisible textarea banayein text select karne ke liye
-    const tempInput = document.createElement('textarea');
-    tempInput.value = linkText;
-    document.body.appendChild(tempInput);
-    
-    // Text select karke execute command chalayein (Isme koi block nahi aata)
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // Mobile ke liye safety check
-    
-    try {
-        document.execCommand('copy');
-        
-        // UI animations aur visual update
-        const copyBtn = document.getElementById('copyBtn');
-        const copyIcon = document.getElementById('copyIcon');
-        const copyText = document.getElementById('copyText');
-        
-        if (copyBtn && copyIcon && copyText) {
-            copyText.textContent = "Copied!";
-            copyIcon.className = "fa-solid fa-check text-emerald-500";
-            copyBtn.classList.remove('bg-indigo-50', 'text-indigo-600');
-            copyBtn.classList.add('bg-emerald-50', 'text-emerald-600', 'border-emerald-200');
+        // 📋 INVISIBLE TEXTAREA BACKUP ENGINE (100% WORKING FOR COPY)
+        function copyToClipboard() {
+            const resultElement = document.getElementById('resultLink');
+            if (!resultElement) return;
+            const linkText = resultElement.textContent;
+            
+            const tempInput = document.createElement('textarea');
+            tempInput.value = linkText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                const copyBtn = document.getElementById('copyBtn');
+                const copyIcon = document.getElementById('copyIcon');
+                const copyText = document.getElementById('copyText');
+                
+                if (copyBtn && copyIcon && copyText) {
+                    copyText.textContent = "Copied!";
+                    copyIcon.className = "fa-solid fa-check text-emerald-500";
+                    copyBtn.classList.remove('bg-indigo-50', 'text-indigo-600');
+                    copyBtn.classList.add('bg-emerald-50', 'text-emerald-600', 'border-emerald-200');
 
-            setTimeout(() => {
-                copyText.textContent = "Copy";
-                copyIcon.className = "fa-regular fa-copy";
-                copyBtn.classList.add('bg-indigo-50', 'text-indigo-600');
-                copyBtn.classList.remove('bg-emerald-50', 'text-emerald-600', 'border-emerald-200');
-            }, 2000);
+                    setTimeout(() => {
+                        copyText.textContent = "Copy";
+                        copyIcon.className = "fa-regular fa-copy";
+                        copyBtn.classList.add('bg-indigo-50', 'text-indigo-600');
+                        copyBtn.classList.remove('bg-emerald-50', 'text-emerald-600', 'border-emerald-200');
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('Fallback Copy failed', err);
+            }
+            document.body.removeChild(tempInput);
         }
-    } catch (err) {
-        console.error('Fallback: Copy karne mein dikkat aayi', err);
-        alert("Copy karne ke liye link par long press karein");
-    }
-    
-    // Temp input ko clean/remove kar dein
-    document.body.removeChild(tempInput);
-}
 
         function generateQR(shortUrl) {
             document.getElementById("qrcode").innerHTML = "";
@@ -282,11 +273,10 @@ function copyToClipboard() {
             else { const data = await res.json(); alert(data.error); }
         });
 
-        // GLOBAL DOM HOOKS
+        const shortenForm = document.getElementById('shortenForm');
         const linksTableBody = document.getElementById('linksTableBody');
         const successAlert = document.getElementById('successAlert');
         const resultLink = document.getElementById('resultLink');
-        const shortenForm = document.getElementById('shortenForm');
 
         async function loadLinks() {
             const res = await fetch('/api/links');
@@ -320,52 +310,26 @@ function copyToClipboard() {
             });
         }
 
-        if (shortenForm) {
-            shortenForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const url = document.getElementById('longUrl').value;
-                const alias = document.getElementById('customAlias').value;
-                const start_date = document.getElementById('startDate').value || null;
-                const expiry_date = document.getElementById('expiryDate').value || null;
-                const password = document.getElementById('linkPassword').value || null;
+        // ✅ FIXED SUBMISSION HANDLER WITH ALL ADVANCED INPUTS BINDING
+        shortenForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const url = document.getElementById('longUrl').value;
+            const alias = document.getElementById('customAlias').value;
+            const start_date = document.getElementById('startDate').value || null;
+            const expiry_date = document.getElementById('expiryDate').value || null;
+            const password = document.getElementById('linkPassword').value || null;
 
-                // Reset Copy Button visually before new trigger
-                const copyBtn = document.getElementById('copyBtn');
-                const copyIcon = document.getElementById('copyIcon');
-                const copyText = document.getElementById('copyText');
-                if (copyBtn && copyIcon && copyText) {
-                    copyText.textContent = "Copy";
-                    copyIcon.className = "fa-regular fa-copy";
-                    copyBtn.className = "ml-1 px-2.5 py-1 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-100 dark:border-indigo-900 text-indigo-600 dark:text-indigo-400 rounded-md transition flex items-center gap-1.5 text-xs font-semibold";
-                }
-
-                try {
-                    const response = await fetch('/api/shorten', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url, alias, start_date, expiry_date, password })
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (response.ok) {
-                        if (resultLink && successAlert) {
-                            resultLink.href = data.short_url; 
-                            resultLink.textContent = data.short_url;
-                            successAlert.classList.remove('hidden'); 
-                        }
-                        shortenForm.reset(); 
-                        loadLinks();
-                    } else { 
-                        alert(data.error || "Failed to shorten URL"); 
-                    }
-                } catch (error) {
-                    console.error("Error occurred:", error);
-                    alert("An error occurred while connecting to the backend.");
-                }
+            const response = await fetch('/api/shorten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url, alias, start_date, expiry_date, password })
             });
-        }
+            const data = await response.json();
+            if (response.ok) {
+                resultLink.href = data.short_url; resultLink.textContent = data.short_url;
+                successAlert.classList.remove('hidden'); shortenForm.reset(); loadLinks();
+            } else { alert(data.error); }
+        });
 
         async function deleteLink(id) {
             if (confirm("Delete this link?")) {
