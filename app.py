@@ -115,49 +115,20 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index')) # Agar pehle se login ho toh seedha dashboard bhejo
+        return redirect(url_for('index'))
 
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.form.get('email').strip()
         password = request.form.get('password')
-        
-        # User ko database se fetch karna
         user = User.query.filter_by(email=email).first()
         
-        # Password verify karna
         if user and check_password_hash(user.password_hash, password):
-            login_user(user) # User session start karna
-            flash('Logged in successfully!', 'success')
-            
-            # ✅ FIXED REDIRECTION: Idhar check karo galti se url_for('register') toh nahi likha!
-            # Ise aap 'index' (dashboard) ya jahan redirect karna chahte ho wahan bhejo
-            return redirect(url_for('index')) 
-        else:
-            flash('Invalid email or password.', 'error')
-            
-    return render_template('login.html')@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index')) # Agar pehle se login ho toh seedha dashboard bhejo
+            login_user(user)
+            return redirect(url_for('index'))
+        
+        flash('Invalid credentials.', 'error')
+        return redirect(url_for('login'))
 
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        
-        # User ko database se fetch karna
-        user = User.query.filter_by(email=email).first()
-        
-        # Password verify karna
-        if user and check_password_hash(user.password_hash, password):
-            login_user(user) # User session start karna
-            flash('Logged in successfully!', 'success')
-            
-            # ✅ FIXED REDIRECTION: Idhar check karo galti se url_for('register') toh nahi likha!
-            # Ise aap 'index' (dashboard) ya jahan redirect karna chahte ho wahan bhejo
-            return redirect(url_for('index')) 
-        else:
-            flash('Invalid email or password.', 'error')
-            
     return render_template('login.html')
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
